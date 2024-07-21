@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import Background from "@/assets/login2.png";
 import Victory from "@/assets/victory.svg";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useState } from "react";
@@ -8,6 +9,10 @@ function Auth() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+
+  const handleLogin = async () => {};
+  const handleSignup = async () => {};
+
   return (
     <div className="h-[100vh] w-[100vw] flex items-center justify-center ">
       <div className="h-[80vh] bg-white border-2 border-white  text-opacity-90 shadow-2xl w-[80vw] md:w-[90vw] lg:w-[70vw] xl:w-[60vw] rounded-3xl grid xl:grid-cols-2 ">
@@ -26,7 +31,7 @@ function Auth() {
               <TabsList className="bg-transparent rounded-none w-full">
                 <TabsTrigger
                   value="login"
-                  className="data-[state=active]:bg-transparent text-black text-opacity-90 border-b-2 rounded-none w-full data-[state=active]:text-black data-[state=active]:font-bold data-[state=active]:border-b-purple-500 p-3 transition-all duration-300"
+                  className="data-[state=active]:bg-transparent  text-black text-opacity-90 border-b-2 rounded-none w-full data-[state=active]:text-black data-[state=active]:font-bold data-[state=active]:border-b-purple-500 p-3 transition-all duration-300"
                 >
                   Login
                 </TabsTrigger>
@@ -52,6 +57,9 @@ function Auth() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
+                <Button className="rounded-full p-6" onClick={handleLogin}>
+                  Login
+                </Button>
               </TabsContent>
               <TabsContent className="flex flex-col gap-5 " value="signup">
                 <Input
@@ -75,9 +83,15 @@ function Auth() {
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                 />
+                <Button className="rounded-full p-6" onClick={handleSignup}>
+                  Signup
+                </Button>
               </TabsContent>
             </Tabs>
           </div>
+        </div>
+        <div className="hidden xl:flex justify-center items-center">
+          <img src={Background} alt="BackGround Image" className="h-[700px]" />
         </div>
       </div>
     </div>
