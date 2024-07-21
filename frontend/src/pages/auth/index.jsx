@@ -27,7 +27,7 @@ function Auth() {
             </p>
           </div>
           <div className="flex items-center justify-center w-full">
-            <Tabs className="w-3/4">
+            <Tabs defaultValue="login" className="w-3/4">
               <TabsList className="bg-transparent rounded-none w-full">
                 <TabsTrigger
                   value="login"
