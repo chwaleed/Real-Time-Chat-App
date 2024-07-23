@@ -4,6 +4,8 @@ import Victory from "@/assets/victory.svg";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { apiClient } from "@/lib/api-client";
+import { SIGNUP_ROUTE } from "@/utils/constants";
 import { useState } from "react";
 import { toast } from "sonner";
 function Auth() {
@@ -29,9 +31,12 @@ function Auth() {
 
   const handleLogin = async () => {};
   const handleSignup = async () => {
-    if (validate()) {
-      alert("done");
+    if (!validate()) {
+      return;
     }
+    const response = await apiClient
+      .post(SIGNUP_ROUTE, { email, password })
+      .then((res) => console.log("User created successfuly", res));
   };
 
   return (
