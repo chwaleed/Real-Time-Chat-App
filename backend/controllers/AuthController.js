@@ -1,10 +1,10 @@
-import { sign } from "jsonwebtoken";
-import User from "../models/UserModel";
+import jwt from "jsonwebtoken";
+import User from "../models/UserModel.js";
 
 const tokenAge = 3 * 24 * 60 * 60 * 1000;
 
 const createToken = (email, password) => {
-  return sign({ email, password }, process.env.JWT_KEY, {
+  return jwt.sign({ email, password }, process.env.JWT_KEY, {
     expiresIn: tokenAge,
   });
 };
