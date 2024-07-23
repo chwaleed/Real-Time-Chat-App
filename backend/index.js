@@ -10,6 +10,14 @@ const app = express();
 const port = process.env.PORT || 3001;
 const databaseURL = process.env.DATABASE_URL;
 
+mongoose
+  .connect(databaseURL)
+  .then(() => console.log("DB Connected Successfuly"))
+  .catch((err) => {
+    console.log(err.message);
+    process.exit();
+  });
+
 app.use(
   cors({
     origin: [process.env.ORIGIN],
@@ -26,11 +34,3 @@ app.use("/api/auth", authRoutes);
 const server = app.listen(port, () => {
   console.log(`Server is listining at port ${port}`);
 });
-
-mongoose
-  .connect(databaseURL)
-  .then(() => console.log("DB Connected Successfuly"))
-  .catch((err) => {
-    console.log(err.message);
-    process.exit();
-  });
