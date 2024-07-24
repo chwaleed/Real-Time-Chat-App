@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { apiClient } from "@/lib/api-client";
-import { SIGNUP_ROUTE } from "@/utils/constants";
+import { SIGNIN_ROUTE, SIGNUP_ROUTE } from "@/utils/constants";
 import { useState } from "react";
 import { toast } from "sonner";
 function Auth() {
@@ -26,10 +26,34 @@ function Auth() {
       toast.error("Password and confirm password should be same.");
       return false;
     }
+
     return true;
   };
 
-  const handleLogin = async () => {};
+  const handleLogin = async () => {
+    if (!email.length) {
+      toast.error("Email is required.");
+      return;
+    }
+    if (!password) {
+      toast.error("Password is required.");
+      return;
+    }
+    try {
+      console.log(email, password);
+      const response = await apiClient.post(
+        SIGNIN_ROUTE,
+        { email, password },
+        { withCredentials: true }
+      );
+      console.log(response);
+      toast.message("Successfuly login");
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.message);
+    }
+  };
+
   const handleSignup = async () => {
     if (!validate()) {
       return;

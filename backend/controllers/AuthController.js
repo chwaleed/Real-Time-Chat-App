@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import User from "../models/UserModel.js";
-import { compare } from "bcrypt";
+// import { compare } from "bcrypt";
+import bcrypt from "bcrypt";
 
 const tokenAge = 3 * 24 * 60 * 60 * 1000;
 
@@ -17,12 +18,13 @@ export const signup = async (request, response, next) => {
     }
     const exsistingUser = await User.findOne({ email });
     if (exsistingUser) {
-      console.log("User exisits");
       return response
         .status(409)
         .json({ message: "User already exsits with this email" });
     }
-    const user = await User.create({ email, password });
+    const salt = await bcrypt.genSalt(10);
+    const hashPassword = await bcrypt.hash(password, salt);
+    const user = await User.create({ email, password: hashPassword });
     await user.save();
     response.cookie("jwt", createToken(email, user.id), {
       maxAge: tokenAge,
@@ -38,23 +40,26 @@ export const signup = async (request, response, next) => {
       },
     });
   } catch (error) {
-    console.log({ error });
     return response.status(500).json({ message: "Internal Server Error" });
   }
 };
 
-export const login = async (request, response, next) => {
+export const signin = async (request, response, next) => {
   try {
     const { email, password } = request.body;
+    console.log(email, password);
     if (!email || !password) {
-      return response.status(400).send("Email and Password is required");
+      return response
+        .status(400)
+        .json({ message: "Email and Password is required" });
     }
     const user = await User.findOne({ email });
+    console.log(user);
     if (!user) {
       return response.status(404).json({ message: "User not Found" });
     }
-    const verifyPassword = await compare(password, user.password);
-    if (!verifyPassword) {
+    const auth = await bcrypt.compare(password, user.password);
+    if (!auth) {
       return response.status(400).json({ message: "Password is incorrect" });
     }
     response.cookie("jwt", createToken(email, user.id), {
@@ -76,6 +81,6 @@ export const login = async (request, response, next) => {
     });
   } catch (error) {
     console.log({ error });
-    return response.status(500).send("Internal Server Error");
+    return response.status(500).json({ message: `Error : ${error}` });
   }
 };
