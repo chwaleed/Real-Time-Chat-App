@@ -47,14 +47,12 @@ export const signup = async (request, response, next) => {
 export const signin = async (request, response, next) => {
   try {
     const { email, password } = request.body;
-    console.log(email, password);
     if (!email || !password) {
       return response
         .status(400)
         .json({ message: "Email and Password is required" });
     }
     const user = await User.findOne({ email });
-    console.log(user);
     if (!user) {
       return response.status(404).json({ message: "User not Found" });
     }
@@ -80,7 +78,6 @@ export const signin = async (request, response, next) => {
       },
     });
   } catch (error) {
-    console.log({ error });
     return response.status(500).json({ message: `Error : ${error}` });
   }
 };

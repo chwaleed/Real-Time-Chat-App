@@ -7,8 +7,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { apiClient } from "@/lib/api-client";
 import { SIGNIN_ROUTE, SIGNUP_ROUTE } from "@/utils/constants";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 function Auth() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -40,16 +42,20 @@ function Auth() {
       return;
     }
     try {
-      console.log(email, password);
       const response = await apiClient.post(
         SIGNIN_ROUTE,
         { email, password },
         { withCredentials: true }
       );
-      console.log(response);
+      if (response.data.user.id) {
+        if (response.data.user.profileSetup) {
+          navigate("/chat");
+        } else {
+          navigate("/profile");
+        }
+      }
       toast.message("Successfuly login");
     } catch (error) {
-      console.log(error);
       toast.error(error.response.data.message);
     }
   };
@@ -64,6 +70,9 @@ function Auth() {
         { email, password },
         { withCredentials: true }
       );
+      if (response.status == 201) {
+        navigate("/profile");
+      }
       toast.message("User Successfuly Created.");
     } catch (error) {
       console.log(error);

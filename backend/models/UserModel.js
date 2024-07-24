@@ -33,18 +33,6 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-// This can also be done
-// userSchema.pre("save", async function (next) {
-//   try {
-//     const salt = await genSalt();
-//     this.password = await hash(this.password, salt);
-//     next();
-//   } catch (error) {
-//     console.error("Error hashing password:", error);
-//     next(error);
-//   }
-// });
-
 const User = mongoose.model("Users", userSchema);
 
 export default User;
