@@ -15,7 +15,15 @@ export const signup = async (request, response, next) => {
     if (!email || !password) {
       return response.status(400).send("Email and Password is required");
     }
+    const exsistingUser = await User.findOne({ email });
+    if (exsistingUser) {
+      console.log("User exisits");
+      return response
+        .status(409)
+        .json({ message: "User already exsits with this email" });
+    }
     const user = await User.create({ email, password });
+    await user.save();
     response.cookie("jwt", createToken(email, user.id), {
       maxAge: tokenAge,
       secure: true,
@@ -31,7 +39,7 @@ export const signup = async (request, response, next) => {
     });
   } catch (error) {
     console.log({ error });
-    return response.status(500).send("Internal Server Error");
+    return response.status(500).json({ message: "Internal Server Error" });
   }
 };
 

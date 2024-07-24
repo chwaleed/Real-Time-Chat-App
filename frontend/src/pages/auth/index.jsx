@@ -35,11 +35,15 @@ function Auth() {
       return;
     }
     try {
-      const response = await apiClient.post(SIGNUP_ROUTE, { email, password });
+      const response = await apiClient.post(
+        SIGNUP_ROUTE,
+        { email, password },
+        { withCredentials: true }
+      );
       toast.message("User Successfuly Created.");
-      console.log("User created successfully", response.data);
     } catch (error) {
-      toast.error("Error in creating User");
+      console.log(error);
+      toast.error(error.response.data.message);
     }
   };
   return (
