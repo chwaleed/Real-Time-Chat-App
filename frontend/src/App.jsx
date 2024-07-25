@@ -1,8 +1,13 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import Auth from "./pages/auth";
 import Chat from "./pages/chat";
 import Profile from "./pages/profile";
 import { useAppStore } from "./store/index.js";
+import { useState, useEffect } from "react";
+import { apiClient } from "./lib/api-client";
+import { GET_USER_INFO } from "./utils/constants";
 
 const PrivateRoute = ({ children }) => {
   const { userInfo } = useAppStore();
@@ -16,6 +21,27 @@ const AuthRoute = ({ children }) => {
 };
 
 function App() {
+  const { userInfo, setUserInfo } = useAppStore();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const getUserInfo = async () => {
+      try {
+        const response = await apiClient.get(GET_USER_INFO, {
+          withCredentials: true,
+        });
+        console.log(response);
+      } catch (error) {
+        console.log("ERROR: ", error);
+      }
+    };
+    if (!userInfo) {
+      getUserInfo();
+    } else {
+      setLoading(false);
+    }
+  }, [userInfo, setUserInfo]);
+
   return (
     <BrowserRouter>
       <Routes>
