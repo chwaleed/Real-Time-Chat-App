@@ -82,4 +82,26 @@ export const signin = async (request, response, next) => {
   }
 };
 
-export const getUserInfo = async () => {};
+export const getUserInfo = async (request, response, next) => {
+  try {
+    const userData = await User.findById(request.userId);
+    if (!userData) {
+      return response
+        .status(404)
+        .json({ message: "User with given id not found" });
+    }
+    return response.status(200).json({
+      user: {
+        id: userData.id,
+        email: userData.email,
+        profileSetup: userData.profileSetup,
+        firstName: userData.firstName,
+        lastName: userData.lastName,
+        image: userData.image,
+        color: userData.color,
+      },
+    });
+  } catch (error) {
+    console.log("Error ");
+  }
+};
