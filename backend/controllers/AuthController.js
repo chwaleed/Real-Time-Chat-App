@@ -81,3 +81,5 @@ export const signin = async (request, response, next) => {
     return response.status(500).json({ message: `Error : ${error}` });
   }
 };
+
+export const getUserInfo = async () => {};
