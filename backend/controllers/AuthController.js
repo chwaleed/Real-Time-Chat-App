@@ -5,8 +5,8 @@ import bcrypt from "bcrypt";
 
 const tokenAge = 3 * 24 * 60 * 60 * 1000;
 
-const createToken = (email, password) => {
-  return jwt.sign({ email, password }, process.env.JWT_KEY, {
+const createToken = (email, userId) => {
+  return jwt.sign({ email, userId }, process.env.JWT_KEY, {
     expiresIn: tokenAge,
   });
 };
@@ -65,7 +65,6 @@ export const signin = async (request, response, next) => {
       secure: true,
       sameSite: "None",
     });
-
     return response.status(200).json({
       user: {
         id: user.id,
@@ -91,17 +90,15 @@ export const getUserInfo = async (request, response, next) => {
         .json({ message: "User with given id not found" });
     }
     return response.status(200).json({
-      user: {
-        id: userData.id,
-        email: userData.email,
-        profileSetup: userData.profileSetup,
-        firstName: userData.firstName,
-        lastName: userData.lastName,
-        image: userData.image,
-        color: userData.color,
-      },
+      id: userData.id,
+      email: userData.email,
+      profileSetup: userData.profileSetup,
+      firstName: userData.firstName,
+      lastName: userData.lastName,
+      image: userData.image,
+      color: userData.color,
     });
   } catch (error) {
-    console.log("Error ");
+    return response.status(500).json({ message: `Error : ${error}` });
   }
 };
