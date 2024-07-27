@@ -1,5 +1,7 @@
 /* eslint-disable no-unused-vars */
+import { Avatar } from "@/components/ui/avatar";
 import { useAppStore } from "@/store/index.js";
+import { AvatarImage } from "@radix-ui/react-avatar";
 import { useState } from "react";
 import { IoArrowBack } from "react-icons/io5";
 
@@ -24,7 +26,23 @@ function Profile() {
             className="h-full w-32 md:w-48 md:h-48 relative flex items-center justify-center"
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}
-          ></div>
+          >
+            <Avatar className="h-32 w-32 md:w-48 md:h-48 rounded-full overflow-hidden">
+              {image ? (
+                <AvatarImage
+                  src={image}
+                  alt="Profile"
+                  className="object-cover w-full h-full bg-black"
+                />
+              ) : (
+                <div className="uppercase h-32 w-32 md:w-48 md:h-48 text-5xl border-[1px] flex items-center justify-center rounded-full ">
+                  {firstName
+                    ? firstName.split("").shift()
+                    : userInfo.email.split("").shift()}
+                </div>
+              )}
+            </Avatar>
+          </div>
         </div>
       </div>
     </div>
