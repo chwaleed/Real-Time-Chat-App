@@ -7,6 +7,7 @@ import { useState } from "react";
 import { IoArrowBack } from "react-icons/io5";
 import { FaTrash, FaPlus } from "react-icons/fa";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 function Profile() {
   const { userInfo } = useAppStore();
@@ -14,7 +15,7 @@ function Profile() {
   const [lastName, setLastName] = useState("");
   const [image, setImage] = useState("");
   const [hovered, setHovered] = useState("");
-  const [selectedColor, setSelectedColor] = useState(0);
+  const [selectedColor, setSelectedColor] = useState("");
 
   const saveChanges = async () => {};
 
@@ -81,7 +82,7 @@ function Profile() {
             <div className="w-full">
               <Input
                 placeholder="Last Name"
-                type="email"
+                type="text"
                 onChange={(e) => setLastName(e.target.value)}
                 value={lastName}
                 className="rounded-lg p-6 bg-[#2c2e3b] border-none"
@@ -92,14 +93,23 @@ function Profile() {
                 <div
                   className={`${color} h-8 w-8 rounded-full cursor-pointer transition-all duration-300 ${
                     selectedColor === index
-                      ? "outline outline-white/50 outline-1"
+                      ? "outline outline-white/50 outline-2"
                       : ""
                   }`}
+                  onClick={() => setSelectedColor(index)}
                   key={index}
                 ></div>
               ))}
             </div>
           </div>
+        </div>
+        <div className="w-full">
+          <Button
+            className=" h-16 w-full bg-purple-800 hover:bg-purple-900 transition-all duration-300 "
+            onClick={saveChanges}
+          >
+            Save Changes
+          </Button>
         </div>
       </div>
     </div>
