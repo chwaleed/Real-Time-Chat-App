@@ -6,8 +6,9 @@ import { toast } from "sonner";
 function Chat() {
   const { userInfo } = useAppStore();
   const navigate = useNavigate();
+  console.log(userInfo);
   useEffect(() => {
-    if (!userInfo.prfileSetup) {
+    if (!userInfo.profileSetup) {
       toast("Please setup profile to continue.");
       navigate("/profile");
     }
