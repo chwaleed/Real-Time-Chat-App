@@ -3,7 +3,7 @@ import { Avatar } from "@/components/ui/avatar";
 import { colors, getColor } from "@/lib/utils";
 import { useAppStore } from "@/store/index.js";
 import { AvatarImage } from "@radix-ui/react-avatar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IoArrowBack } from "react-icons/io5";
 import { FaTrash, FaPlus } from "react-icons/fa";
 import { Input } from "@/components/ui/input";
@@ -14,13 +14,21 @@ import { apiClient } from "@/lib/api-client";
 import { useNavigate } from "react-router-dom";
 
 function Profile() {
-  const navigate = useNavigate();
+  const nevigate = useNavigate();
   const { userInfo, setUserInfo } = useAppStore();
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [image, setImage] = useState("");
   const [hovered, setHovered] = useState("");
   const [selectedColor, setSelectedColor] = useState("");
+
+  useEffect(() => {
+    if (userInfo.profileSetup) {
+      setFirstName(userInfo.firstName);
+      setLastName(userInfo.lastName);
+      setSelectedColor(userInfo.color);
+    }
+  }, [userInfo]);
 
   const validateProfile = () => {
     if (!firstName) {
@@ -41,23 +49,32 @@ function Profile() {
     try {
       const response = await apiClient.post(
         UPDATE_PROFILE_ROUTE,
-        { firstName, lastName, selectedColor },
+        { firstName, lastName, color: selectedColor },
         { withCredentials: true }
       );
+      console.log(response.data);
       if (response.status === 200 && response.data) {
         setUserInfo({ ...response.data });
         toast.success("Profile updated successfully");
-        navigate("/chat");
+        nevigate("/chat");
       }
     } catch (error) {
       console.log("ERROR ", error);
     }
   };
 
+  const handleNavigate = () => {
+    if (userInfo.profileSetup) {
+      nevigate("/chat");
+    } else {
+      toast.error("Please setup profile.");
+    }
+  };
+
   return (
     <div className="bg-[#1b1c24] h-[100vh] flex items-center justify-center flex-col gap-10 ">
       <div className="flex flex-col gap-10 w-[80wv] md:w-max ">
-        <div className="">
+        <div onClick={handleNavigate}>
           <IoArrowBack className="text-4xl lg:text-6xl text-white/90 cursor-pointer" />
         </div>
         <div className="grid grid-cols-2">
