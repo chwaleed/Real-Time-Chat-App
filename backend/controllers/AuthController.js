@@ -102,3 +102,12 @@ export const getUserInfo = async (request, response, next) => {
     return response.status(500).json({ message: `Error : ${error}` });
   }
 };
+
+export const updateProfile = async (request, response, next) => {
+  try {
+    const { userId } = request;
+    const { firstName, lastName, color } = request.body;
+  } catch (error) {
+    console.log("Error");
+  }
+};
