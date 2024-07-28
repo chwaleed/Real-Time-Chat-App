@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import {
   ADD_PROFILE_IMAGE_ROUTE,
+  HOST,
   UPDATE_PROFILE_ROUTE,
 } from "@/utils/constants";
 import { apiClient } from "@/lib/api-client";
@@ -31,6 +32,10 @@ function Profile() {
       setFirstName(userInfo.firstName);
       setLastName(userInfo.lastName);
       setSelectedColor(userInfo.color);
+    }
+    console.log(userInfo);
+    if (userInfo.image) {
+      setImage(`${HOST}/${userInfo.image}`);
     }
   }, [userInfo]);
 

@@ -159,4 +159,22 @@ export const addProfileImage = async (request, response, next) => {
   }
 };
 
-export const removeProfileImage = async (request, response, next) => {};
+export const removeProfileImage = async (request, response, next) => {
+  try {
+    const { userId } = request.body;
+    const user = await User.findById(userId);
+    if (!user) {
+      return response.status(404).json({ message: "User not found." });
+    }
+    if (user.image) {
+      unlinkSync(user.image);
+    }
+    user.image = null;
+    await user.save();
+    return response
+      .status(200)
+      .json({ message: "Profile Image removed Successfuly" });
+  } catch (error) {
+    response.status(500).json({ message: "Internal Server Error" });
+  }
+};
