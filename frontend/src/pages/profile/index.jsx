@@ -12,6 +12,7 @@ import { toast } from "sonner";
 import {
   ADD_PROFILE_IMAGE_ROUTE,
   HOST,
+  REMOVE_PROFILE_IMAGE_ROUTE,
   UPDATE_PROFILE_ROUTE,
 } from "@/utils/constants";
 import { apiClient } from "@/lib/api-client";
@@ -104,7 +105,20 @@ function Profile() {
       reader.readAsDataURL(file);
     }
   };
-  const handleDeleteImage = async (event) => {};
+  const handleDeleteImage = async (event) => {
+    try {
+      const response = await apiClient.delete(REMOVE_PROFILE_IMAGE_ROUTE, {
+        withCredentials: true,
+      });
+      if (response.status === 200) {
+        setUserInfo({ ...userInfo, image: null });
+        toast.success("Image removed successfuly");
+        setImage(null);
+      }
+    } catch (error) {
+      console.log("ERROR", error);
+    }
+  };
   return (
     <div className="bg-[#1b1c24] h-[100vh] flex items-center justify-center flex-col gap-10 ">
       <div className="flex flex-col gap-10 w-[80wv] md:w-max ">

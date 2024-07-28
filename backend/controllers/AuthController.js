@@ -161,7 +161,9 @@ export const addProfileImage = async (request, response, next) => {
 
 export const removeProfileImage = async (request, response, next) => {
   try {
-    const { userId } = request.body;
+    const { userId } = request;
+    // console.log(request);
+    // console.log(userId);
     const user = await User.findById(userId);
     if (!user) {
       return response.status(404).json({ message: "User not found." });
