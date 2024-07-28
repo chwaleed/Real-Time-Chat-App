@@ -136,3 +136,5 @@ export const updateProfile = async (request, response, next) => {
     console.log("Error");
   }
 };
+
+export const addProfileImage = async (request, response, next) => {};
