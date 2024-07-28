@@ -2,6 +2,7 @@ import jwt from "jsonwebtoken";
 import User from "../models/UserModel.js";
 // import { compare } from "bcrypt";
 import bcrypt from "bcrypt";
+import { renameSync, unlinkSync } from "fs";
 
 const tokenAge = 3 * 24 * 60 * 60 * 1000;
 
@@ -137,4 +138,25 @@ export const updateProfile = async (request, response, next) => {
   }
 };
 
-export const addProfileImage = async (request, response, next) => {};
+export const addProfileImage = async (request, response, next) => {
+  try {
+    if (!request.file) {
+      return response.status(400).json({ message: "File not found" });
+    }
+    const date = Date.now();
+    let filename = "uploads/profiles/" + date + request.file.originalname;
+    renameSync(request.file.path, filename);
+    const updatedUser = await User.findByIdAndUpdate(
+      request.userId,
+      { image: filename },
+      { new: true, runValidators: true }
+    );
+    return response.status(200).json({
+      image: updatedUser.image,
+    });
+  } catch (error) {
+    response.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+export const removeProfileImage = async (request, response, next) => {};

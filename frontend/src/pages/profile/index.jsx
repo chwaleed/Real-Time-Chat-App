@@ -78,13 +78,16 @@ function Profile() {
     fileInputRef.current.click();
   };
   const handleImageChange = async (event) => {
-    const file = event.target.file(0);
+    const file = event.target.files[0];
+    console.log(file);
     if (file) {
+      console.log("EHLLO");
       const formData = new FormData();
       formData.append("profile-image", file);
       const response = await apiClient.post(ADD_PROFILE_IMAGE_ROUTE, formData, {
         withCredentials: true,
       });
+      console.log(response);
       if (response.status === 200 && response.data.image) {
         setUserInfo({ ...userInfo, image: response.data.image });
         toast.success("Image upadated successfully");
