@@ -11,7 +11,7 @@ function Chat() {
   const navigate = useNavigate();
   // console.log(userInfo);
   useEffect(() => {
-    if (!userInfo.profilSetup) {
+    if (!userInfo.profileSetup) {
       toast("Please setup profile to continue.");
       navigate("/profile");
     }
