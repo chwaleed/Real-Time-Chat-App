@@ -1,3 +1,5 @@
+import ProfileInfo from "./components/profile-info";
+
 /* eslint-disable react/prop-types */
 function ContactContainer() {
   return (
@@ -15,6 +17,7 @@ function ContactContainer() {
           <Title text="Channels" />
         </div>
       </div>
+      <ProfileInfo />
     </div>
   );
 }
