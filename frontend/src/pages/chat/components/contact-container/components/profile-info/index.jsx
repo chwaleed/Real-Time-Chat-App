@@ -9,8 +9,11 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@radix-ui/react-tooltip";
+import { useNavigate } from "react-router-dom";
+import { IoPowerSharp } from "react-icons/io5";
 function ProfileInfo() {
   const { userInfo } = useAppStore();
+  const navigate = useNavigate();
   return (
     <div className=" absolute bottom-0 h-16 flex items-center justify-between px-10 w-full bg-[#2a2b33]">
       <div className="flex gap-3 items-center justify-center">
@@ -45,10 +48,26 @@ function ProfileInfo() {
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger>
-              <FiEdit2 className="text-purple-500 text-xl font-medium" />
+              <FiEdit2
+                onClick={() => navigate("/profile")}
+                className="text-purple-500 text-xl font-medium"
+              />
             </TooltipTrigger>
-            <TooltipContent>
-              <p>Add to library</p>
+            <TooltipContent className="bg-[#1c1b1e] border-none text-white">
+              Edit Profile
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger>
+              <IoPowerSharp
+                onClick={() => navigate("/profile")}
+                className="text-purple-500 text-xl font-medium"
+              />
+            </TooltipTrigger>
+            <TooltipContent className="bg-[#1c1b1e] border-none text-white">
+              Logout
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
