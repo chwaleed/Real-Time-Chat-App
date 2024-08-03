@@ -180,3 +180,12 @@ export const removeProfileImage = async (request, response, next) => {
     response.status(500).json({ message: "Internal Server Error" });
   }
 };
+
+export const logOut = async (request, response, next) => {
+  try {
+    response.cookie("jwt", "", { maxAge: 1, secure: true, sameSite: "None" });
+    return response.status(200).json({ message: "Logout successfuly" });
+  } catch (error) {
+    return response.status(500).json({ message: "Internal Server Error" });
+  }
+};

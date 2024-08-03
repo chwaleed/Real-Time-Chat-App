@@ -14,6 +14,9 @@ import { IoPowerSharp } from "react-icons/io5";
 function ProfileInfo() {
   const { userInfo } = useAppStore();
   const navigate = useNavigate();
+
+  const logOut = async () => {};
+
   return (
     <div className=" absolute bottom-0 h-16 flex items-center justify-between px-10 w-full bg-[#2a2b33]">
       <div className="flex gap-3 items-center justify-center">
@@ -62,8 +65,8 @@ function ProfileInfo() {
           <Tooltip>
             <TooltipTrigger>
               <IoPowerSharp
-                onClick={() => navigate("/profile")}
-                className="text-purple-500 text-xl font-medium"
+                onClick={logOut}
+                className="text-red-500 text-xl font-medium"
               />
             </TooltipTrigger>
             <TooltipContent className="bg-[#1c1b1e] border-none text-white">
