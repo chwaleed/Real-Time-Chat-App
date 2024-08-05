@@ -5,13 +5,17 @@ export const searchContacts = async (request, response, next) => {
     if (!searchTerm) {
       return response.status(400).json({ message: "searchTerm is required." });
     }
-    const sanatizeSearchTerm = searchTerm.replace(/[^\w\s]/gi, "");
-    const regex = new RegExp(sanatizeSearchTerm, "i");
+    const sanitizedSearchTerm = searchTerm.replace(/[.*+?^${}|[\]\\]/g, "\\$&");
+
     const contacts = await User.find({
       $and: [
-        { _id: { $ne: request.userId } },
+        { _id: { $ne: request.userId } }, // Assuming request.userId is correctly obtained
         {
-          $or: [{ firstName: regex }, { lastName: regex }, { email: regex }],
+          $or: [
+            { firstName: { $regex: sanitizedSearchTerm, $options: "i" } },
+            { lastName: { $regex: sanitizedSearchTerm, $options: "i" } },
+            { email: { $regex: sanitizedSearchTerm, $options: "i" } },
+          ],
         },
       ],
     });
