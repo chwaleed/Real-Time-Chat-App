@@ -17,12 +17,31 @@ import {
 import { Input } from "@/components/ui/input";
 import Lottie from "react-lottie";
 import { animationDefaultOptions } from "@/lib/utils";
+import { apiClient } from "@/lib/api-client";
+import { SEARCH_CONTACTS_ROUTES } from "@/utils/constants";
 
 function NewDm() {
   const [opneNewContactModel, setOpenNewContactModel] = useState(false);
   const [searchedContacts, setSearchedContacts] = useState([]);
 
-  const searchContacts = async (searchTerm) => {};
+  const searchContacts = async (searchTerm) => {
+    try {
+      if (searchTerm.length > 0) {
+        const response = await apiClient.post(
+          SEARCH_CONTACTS_ROUTES,
+          {
+            searchTerm,
+          },
+          { withCredentials: true }
+        );
+        if (response.status === 200 && response.data.contacts) {
+          setSearchedContacts(response.data.contacts);
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>
