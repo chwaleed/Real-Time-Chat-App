@@ -1,7 +1,8 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
-export const createChatSlice = (set, get)({
-  selectedChatType: null,
-  selectedChatData: null,
+export const createChatSlice = (set, get) => ({
+  selectedChatType: undefined,
+  selectedChatData: undefined,
   selectedChatMessages: [],
   setSelectedChatType: (selectedChatType) => set({ selectedChatType }),
   setSelectedChatData: (selectedChatData) => set({ selectedChatData }),
@@ -9,7 +10,7 @@ export const createChatSlice = (set, get)({
     set({ selectedChatMessages }),
   closeChat: () =>
     set({
-      selectedChatData: null,
+      selectedChatData: undefined,
       selectedChatType: undefined,
       selectedChatMessages: [],
     }),

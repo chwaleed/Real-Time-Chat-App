@@ -21,8 +21,10 @@ import { apiClient } from "@/lib/api-client";
 import { HOST, SEARCH_CONTACTS_ROUTES } from "@/utils/constants";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { useAppStore } from "@/store";
 
 function NewDm() {
+  const { setSelectedChatType, setSelectedChatData } = useAppStore();
   const [opneNewContactModel, setOpenNewContactModel] = useState(false);
   const [searchedContacts, setSearchedContacts] = useState([]);
 
@@ -36,7 +38,6 @@ function NewDm() {
           },
           { withCredentials: true }
         );
-        console.log(response.data.contacts);
         if (response.status === 200 && response.data.contacts) {
           setSearchedContacts(response.data.contacts);
         }
@@ -49,6 +50,8 @@ function NewDm() {
   };
   const selectNewContact = (contact) => {
     setOpenNewContactModel(false);
+    setSelectedChatType("contact");
+    setSelectedChatData(contact);
     setSearchedContacts([]);
   };
 
