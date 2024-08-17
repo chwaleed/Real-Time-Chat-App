@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable no-unused-vars */
 import { useAppStore } from "@/store";
@@ -11,7 +12,7 @@ export const useSocket = () => {
   return useContext(SocketContext);
 };
 
-export const SocketProvider = (children) => {
+export const SocketProvider = ({ children }) => {
   const socket = useRef();
   const { userInfo } = useAppStore();
   useEffect(() => {
@@ -20,13 +21,24 @@ export const SocketProvider = (children) => {
         withCredentials: true,
         query: { userId: userInfo.id },
       });
-      socket.connect.on("connect", () => {
-        console.log("Connected to socket Server");
+
+      socket.current.on("connect", () => {
+        console.log("Connected successfuly");
       });
+      console.log(socket.current);
+      return () => {
+        // Ensure socket.current is defined before calling disconnect
+        if (socket.current) {
+          socket.current.disconnect();
+          socket.current = null; // Clear the reference
+        }
+      };
+    } else {
+      if (socket.current) {
+        socket.current.disconnect();
+        socket.current = null; // Clear the reference
+      }
     }
-    return () => {
-      socket.current.disconnect();
-    };
   }, [userInfo]);
   return (
     <SocketContext.Provider value={socket.current}>

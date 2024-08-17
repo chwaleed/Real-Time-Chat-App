@@ -18,7 +18,7 @@ const setupSocket = (server) => {
     }
   };
 
-  const userSocketMap = Map();
+  const userSocketMap = new Map();
   io.on("connection", (socket) => {
     const userId = socket.handshake.query.userId;
     if (userId) {
@@ -28,7 +28,7 @@ const setupSocket = (server) => {
       console.log("User ID not provided during connection");
     }
 
-    socket.on("disconnect", () => disconnect());
+    socket.on("disconnect", () => disconnect(socket));
   });
 };
 
