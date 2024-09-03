@@ -99,7 +99,7 @@ function NewDm() {
                             <AvatarImage
                               src={`${HOST}/${contact.image}`}
                               alt="Profile"
-                              className="object-cover w-full h-full bg-black"
+                              className="object-cover w-full h-full bg-black rounded-full"
                             />
                           ) : (
                             <div
