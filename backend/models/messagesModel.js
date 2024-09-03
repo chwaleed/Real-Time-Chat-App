@@ -32,3 +32,6 @@ const messageSchema = new mongoose.Schema({
     default: Date.now,
   },
 });
+
+const Message = mongoose.model("Messages", messageSchema);
+export default Message;
