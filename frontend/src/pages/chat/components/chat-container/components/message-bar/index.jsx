@@ -30,7 +30,7 @@ function MessageBar() {
   }, [emojiRef]);
 
   const handleSendMessage = async () => {
-    if (selectedChatType === "contact") {
+    if (selectedChatType === "contact" && message.trim()) {
       socket.emit("sendMessage", {
         sender: userInfo.id,
         content: message,
@@ -38,6 +38,14 @@ function MessageBar() {
         messageType: "text",
         fileUrl: undefined,
       });
+      setMessage("");
+    }
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleSendMessage();
     }
   };
   return (
@@ -49,6 +57,7 @@ function MessageBar() {
           placeholder="Enter Message"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
+          onKeyPress={handleKeyPress}
         />
         <button className="text-neutral-500 focus:border-none focus:outline-none focus:text-white  duration-300 transition-all">
           <GrAttachment className="text-2xl" />

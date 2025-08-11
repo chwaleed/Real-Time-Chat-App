@@ -1,8 +1,31 @@
+import { useAppStore } from "@/store/index.js";
+import { useEffect } from "react";
+import { apiClient } from "@/lib/api-client";
+import { GET_DM_CONTACTS_ROUTES } from "@/utils/constants";
+import ContactList from "./components/contact-list";
 import NewDm from "./components/new-dm";
 import ProfileInfo from "./components/profile-info";
 
 /* eslint-disable react/prop-types */
 function ContactContainer() {
+  const { directMessagesContacts, setDirectMessagesContacts } = useAppStore();
+
+  useEffect(() => {
+    const getContacts = async () => {
+      try {
+        const response = await apiClient.get(GET_DM_CONTACTS_ROUTES, {
+          withCredentials: true,
+        });
+        if (response.data.contacts) {
+          setDirectMessagesContacts(response.data.contacts);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getContacts();
+  }, [setDirectMessagesContacts]);
+
   return (
     <div className="relative md:w-[35vw] lg:w-[30vw] xl:w-[20vw] bg-[#1b1c24] border-r-2 border-[#2f303b] w-full ">
       <div className="pt-3">
@@ -12,6 +35,9 @@ function ContactContainer() {
         <div className="flex items-center  justify-between pr-10">
           <Title text="Direct Messages" />
           <NewDm />
+        </div>
+        <div className="max-h-[38vh] overflow-y-auto scrollbar-hidden">
+          <ContactList contacts={directMessagesContacts} />
         </div>
       </div>
       <div className="my-5 ">
