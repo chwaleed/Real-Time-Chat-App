@@ -1,0 +1,30 @@
+{
+  "name": "real-time-chat-app",
+  "version": "1.0.0",
+  "description": "A modern real-time chat application built with MERN stack and Socket.io",
+  "scripts": {
+    "dev": "concurrently \"npm run backend:dev\" \"npm run frontend:dev\"",
+    "start": "concurrently \"npm run backend:start\" \"npm run frontend:start\"",
+    "backend:dev": "cd backend && npm run dev",
+    "backend:start": "cd backend && npm start",
+    "frontend:dev": "cd frontend && npm run dev",
+    "frontend:start": "cd frontend && npm run preview",
+    "build": "cd frontend && npm run build",
+    "install:all": "npm install && cd backend && npm install && cd ../frontend && npm install"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "keywords": [
+    "chat",
+    "real-time",
+    "mern",
+    "socket.io",
+    "react",
+    "nodejs",
+    "mongodb",
+    "express"
+  ],
+  "author": "chwaleed",
+  "license": "MIT"
+}
