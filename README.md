@@ -15,6 +15,7 @@ A modern real-time chat application built with the MERN stack (MongoDB, Express.
 ## Tech Stack
 
 ### Frontend
+
 - **React 18** with Vite for fast development
 - **Tailwind CSS** for styling
 - **Radix UI** for accessible components
@@ -24,6 +25,7 @@ A modern real-time chat application built with the MERN stack (MongoDB, Express.
 - **React Router** for navigation
 
 ### Backend
+
 - **Node.js** with Express.js
 - **MongoDB** with Mongoose ODM
 - **Socket.io** for real-time messaging
@@ -34,23 +36,27 @@ A modern real-time chat application built with the MERN stack (MongoDB, Express.
 ## Installation & Setup
 
 ### Prerequisites
+
 - Node.js (v18 or higher)
 - MongoDB (local installation or MongoDB Atlas)
 - npm or yarn
 
 ### 1. Clone the Repository
+
 ```bash
 git clone https://github.com/chwaleed/Real-Time-Chat-App.git
 cd Real-Time-Chat-App
 ```
 
 ### 2. Backend Setup
+
 ```bash
 cd backend
 npm install
 ```
 
 Create a `.env` file in the backend directory:
+
 ```env
 PORT=4000
 DATABASE_URL=mongodb://localhost:27017/chatapp
@@ -59,17 +65,20 @@ JWT_KEY=your_super_secret_jwt_key_here
 ```
 
 **For MongoDB Atlas (cloud database):**
+
 ```env
 DATABASE_URL=mongodb+srv://username:password@cluster.mongodb.net/chatapp
 ```
 
 ### 3. Frontend Setup
+
 ```bash
 cd frontend
 npm install
 ```
 
 The frontend environment is already configured in `.env`:
+
 ```env
 VITE_SERVER_URL="http://localhost:4000"
 ```
@@ -77,6 +86,7 @@ VITE_SERVER_URL="http://localhost:4000"
 ### 4. Start the Application
 
 **Terminal 1 - Backend:**
+
 ```bash
 cd backend
 npm start
@@ -85,12 +95,14 @@ npm run dev
 ```
 
 **Terminal 2 - Frontend:**
+
 ```bash
 cd frontend
 npm run dev
 ```
 
 The application will be available at:
+
 - Frontend: http://localhost:5173
 - Backend API: http://localhost:4000
 
@@ -106,6 +118,7 @@ The application will be available at:
 ## API Endpoints
 
 ### Authentication
+
 - `POST /api/auth/signup` - User registration
 - `POST /api/auth/signin` - User login
 - `GET /api/auth/user-info` - Get user information
@@ -115,18 +128,22 @@ The application will be available at:
 - `POST /api/auth/logout` - User logout
 
 ### Contacts
+
 - `POST /api/contacts/search` - Search for contacts
 - `GET /api/contacts/get-contacts-for-dm` - Get user's contact list
 
 ### Messages
+
 - `POST /api/messages/get-messages` - Get conversation history
 
 ## Socket.io Events
 
 ### Client to Server
+
 - `sendMessage` - Send a new message
 
 ### Server to Client
+
 - `receiveMessage` - Receive a new message
 
 ## Project Structure
