@@ -1,5 +1,5 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-undef */
+ 
+ 
 export const createChatSlice = (set, get) => ({
   selectedChatType: undefined,
   selectedChatData: undefined,
@@ -32,17 +32,31 @@ export const createChatSlice = (set, get) => ({
   addMessage: (message) => {
     const { selectedChatMessages, selectedChatType, selectedChatData, unreadMessages, userInfo, allMessages } = get();
     
-    // Determine chat ID based on current user
+    // Normalize message format first
     const senderId = selectedChatType === "channel" ? message.sender : message.sender._id;
     const recipientId = selectedChatType === "channel" ? message.recipient : message.recipient._id;
-    const chatId = senderId === userInfo?.id ? recipientId : senderId;
     
-    // Normalize message format
     const normalizedMessage = {
       ...message,
       recipient: recipientId,
       sender: senderId,
     };
+    
+    // Determine which chat this message belongs to
+    // For the current user, the chat ID is the other person's ID
+    let chatId;
+    if (userInfo) {
+      if (senderId === userInfo.id) {
+        // Current user sent this message, chat ID is the recipient
+        chatId = recipientId;
+      } else {
+        // Someone else sent this message, chat ID is the sender
+        chatId = senderId;
+      }
+    } else {
+      // Fallback if userInfo not available
+      chatId = senderId;
+    }
     
     // Update all messages store
     const chatMessages = allMessages[chatId] || [];
@@ -57,7 +71,7 @@ export const createChatSlice = (set, get) => ({
       updatedSelectedMessages = [...selectedChatMessages, normalizedMessage];
     }
     
-    // Handle unread count
+    // Handle unread count - only increment if message is from someone else and not in current chat
     let updatedUnreadMessages = unreadMessages;
     if (userInfo && senderId !== userInfo.id) {
       if (!selectedChatData || selectedChatData._id !== chatId) {
@@ -93,6 +107,25 @@ export const createChatSlice = (set, get) => ({
     set({
       selectedChatMessages: updatedSelectedMessages,
       allMessages: updatedAllMessages,
+    });
+  },
+  sortContactsByActivity: (contacts) => {
+    const { unreadMessages, allMessages } = get();
+    return [...contacts].sort((a, b) => {
+      // First priority: unread messages count
+      const aUnread = unreadMessages[a._id] || 0;
+      const bUnread = unreadMessages[b._id] || 0;
+      if (aUnread !== bUnread) {
+        return bUnread - aUnread; // Contacts with unread messages first
+      }
+      
+      // Second priority: latest message timestamp
+      const aMessages = allMessages[a._id] || [];
+      const bMessages = allMessages[b._id] || [];
+      const aLatest = aMessages.length > 0 ? new Date(aMessages[aMessages.length - 1].timestamp) : new Date(0);
+      const bLatest = bMessages.length > 0 ? new Date(bMessages[bMessages.length - 1].timestamp) : new Date(0);
+      
+      return bLatest - aLatest; // Most recent messages first
     });
   },
 });

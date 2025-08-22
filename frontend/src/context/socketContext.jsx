@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-/* eslint-disable react-hooks/rules-of-hooks */
+ 
 /* eslint-disable no-unused-vars */
 import { useAppStore } from "@/store";
 import { HOST } from "@/utils/constants";

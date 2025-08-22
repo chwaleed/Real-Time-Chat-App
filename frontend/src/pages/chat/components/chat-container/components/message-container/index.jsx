@@ -3,7 +3,7 @@ import { useEffect, useRef } from "react";
 import { apiClient } from "@/lib/api-client";
 import { GET_MESSAGES_ROUTE } from "@/utils/constants";
 import moment from "moment";
-import Message from "./message";
+import Message from "../message";
 
 function MessageContainers() {
   const scrollRef = useRef();
@@ -46,7 +46,7 @@ function MessageContainers() {
       }
     };
     if (selectedChatData?._id) {
-      if (selectedChatType === "contact") getMessages();
+      if (selectedChatType === "contact" || selectedChatType === "channel") getMessages();
     }
   }, [selectedChatData, selectedChatType, setSelectedChatMessages, allMessages]);
 
@@ -69,7 +69,7 @@ function MessageContainers() {
               {moment(message.timestamp).format("LL")}
             </div>
           )}
-          {selectedChatType === "contact" && <Message message={message} />}
+          {(selectedChatType === "contact" || selectedChatType === "channel") && <Message message={message} />}
         </div>
       );
     });

@@ -7,7 +7,7 @@ import { useEffect } from "react";
 
 function ChatContainer() {
   const socket = useSocket();
-  const { userInfo, selectedChatType, updateMessageStatus } = useAppStore();
+  const { userInfo, updateMessageStatus } = useAppStore();
 
   useEffect(() => {
     if (socket && userInfo) {

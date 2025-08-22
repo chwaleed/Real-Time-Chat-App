@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-vars */
+ 
 import Background from "@/assets/login2.png";
 import Victory from "@/assets/victory.svg";
 import { Button } from "@/components/ui/button";

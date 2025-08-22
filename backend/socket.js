@@ -69,13 +69,28 @@ const setupSocket = (server) => {
 
   const markAsDelivered = async (messageId, recipientId) => {
     try {
-      await Message.findByIdAndUpdate(messageId, { status: "delivered" });
-      const recipientSocketId = await client.hGet("userSocketMap", recipientId);
-      if (recipientSocketId) {
-        io.to(recipientSocketId).emit("message-status-changed", {
-          messageId,
-          status: "delivered",
-        });
+      const message = await Message.findByIdAndUpdate(messageId, { status: "delivered" }, { new: true })
+        .populate("sender", "id")
+        .populate("recipient", "id");
+        
+      if (message) {
+        // Notify the sender that their message was delivered
+        const senderSocketId = await client.hGet("userSocketMap", message.sender.id);
+        if (senderSocketId) {
+          io.to(senderSocketId).emit("message-status-changed", {
+            messageId,
+            status: "delivered",
+          });
+        }
+        
+        // Also notify the recipient (for their own UI updates)
+        const recipientSocketId = await client.hGet("userSocketMap", recipientId);
+        if (recipientSocketId) {
+          io.to(recipientSocketId).emit("message-status-changed", {
+            messageId,
+            status: "delivered",
+          });
+        }
       }
     } catch (error) {
       console.error("Error marking message as delivered:", error);
@@ -84,13 +99,28 @@ const setupSocket = (server) => {
 
   const markAsRead = async (messageId, recipientId) => {
     try {
-      await Message.findByIdAndUpdate(messageId, { status: "read" });
-      const recipientSocketId = await client.hGet("userSocketMap", recipientId);
-      if (recipientSocketId) {
-        io.to(recipientSocketId).emit("message-status-changed", {
-          messageId,
-          status: "read",
-        });
+      const message = await Message.findByIdAndUpdate(messageId, { status: "read" }, { new: true })
+        .populate("sender", "id")
+        .populate("recipient", "id");
+        
+      if (message) {
+        // Notify the sender that their message was read
+        const senderSocketId = await client.hGet("userSocketMap", message.sender.id);
+        if (senderSocketId) {
+          io.to(senderSocketId).emit("message-status-changed", {
+            messageId,
+            status: "read",
+          });
+        }
+        
+        // Also notify the recipient (for their own UI updates)
+        const recipientSocketId = await client.hGet("userSocketMap", recipientId);
+        if (recipientSocketId) {
+          io.to(recipientSocketId).emit("message-status-changed", {
+            messageId,
+            status: "read",
+          });
+        }
       }
     } catch (error) {
       console.error("Error marking message as read:", error);
