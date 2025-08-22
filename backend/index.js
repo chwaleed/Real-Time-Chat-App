@@ -7,19 +7,33 @@ import authRoutes from "./routes/AuthRoutes.js";
 import contactsRoutes from "./routes/ContactRoutes.js";
 import messagesRoutes from "./routes/MessagesRoutes.js";
 import setupSocket from "./socket.js";
+import { connectRedis } from "./redis.js";
 
 dotenv.config();
+connectRedis();
 const app = express();
 const port = process.env.PORT || 3001;
 const databaseURL = process.env.DATABASE_URL;
 
-mongoose
-  .connect(databaseURL)
-  .then(() => console.log("DB Connected Successfuly"))
-  .catch((err) => {
-    console.log(err.message);
-    process.exit();
-  });
+export const connectWithRetry = () => {
+  mongoose
+    .connect(databaseURL)
+    .then(() => {
+      console.log("DB Connected Successfully");
+    })
+    .catch((err) => {
+      console.log("DB Connection Failed. Retrying in 5 seconds...");
+      console.error(err.message);
+      setTimeout(connectWithRetry, 5000);
+    });
+};
+
+connectWithRetry();
+
+mongoose.connection.on("disconnected", () => {
+  console.log("DB Disconnected. Retrying connection...");
+  connectWithRetry();
+});
 
 app.use(
   cors({
