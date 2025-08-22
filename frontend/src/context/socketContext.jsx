@@ -25,15 +25,19 @@ export const SocketProvider = ({ children }) => {
         console.log("Connected to socket server.");
       });
 
-      const handleReciveMessage = (messsage) => {
-        const { selectedChatData, selectedChatType, addMessage } =
+      const handleReciveMessage = (message) => {
+        const { selectedChatData, selectedChatType, addMessage, userInfo } =
           useAppStore.getState();
-        if (
-          selectedChatType !== undefined &&
-          (selectedChatData._id === messsage.sender._id ||
-            selectedChatData._id === messsage.recipient._id)
-        ) {
-          addMessage(messsage);
+        
+        // Always add the message to the store - let addMessage handle unread counts
+        addMessage(message);
+
+        // Mark message as delivered if we're the recipient
+        if (message.recipient._id === userInfo.id) {
+          socket.current.emit("message-delivered", {
+            messageId: message._id,
+            recipientId: userInfo.id,
+          });
         }
       };
       socket.current.on("receiveMessage", handleReciveMessage);

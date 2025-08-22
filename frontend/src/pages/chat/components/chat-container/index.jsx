@@ -7,32 +7,21 @@ import { useEffect } from "react";
 
 function ChatContainer() {
   const socket = useSocket();
-  const { userInfo, selectedChatType, addMessage, setMessages } = useAppStore();
+  const { userInfo, selectedChatType, updateMessageStatus } = useAppStore();
 
   useEffect(() => {
-    if (socket.current && userInfo) {
-      socket.current.on("receiveMessage", (message) => {
-        addMessage(message);
-        socket.current.emit("message-delivered", {
-          messageId: message._id,
-          recipientId: userInfo.id,
-        });
-      });
+    if (socket && userInfo) {
+      const handleMessageStatusChanged = ({ messageId, status }) => {
+        updateMessageStatus(messageId, status);
+      };
 
-      socket.current.on("message-status-changed", ({ messageId, status }) => {
-        setMessages((prevMessages) =>
-          prevMessages.map((message) =>
-            message._id === messageId ? { ...message, status } : message
-          )
-        );
-      });
+      socket.on("message-status-changed", handleMessageStatusChanged);
 
       return () => {
-        socket.current.off("receiveMessage");
-        socket.current.off("message-status-changed");
+        socket.off("message-status-changed", handleMessageStatusChanged);
       };
     }
-  }, [socket, userInfo, addMessage, setMessages]);
+  }, [socket, userInfo, updateMessageStatus]);
 
   return (
     <div className="fixed top-0 h-[100vh] w-[100vw] bg-[#1c1d25] flex flex-col md:static md:flex-1">

@@ -12,11 +12,19 @@ function MessageContainers() {
     selectedChatData,
     selectedChatMessages,
     setSelectedChatMessages,
+    allMessages,
   } = useAppStore();
 
   useEffect(() => {
     const getMessages = async () => {
       try {
+        // First check if we have cached messages
+        if (allMessages[selectedChatData._id]) {
+          setSelectedChatMessages(allMessages[selectedChatData._id]);
+          return;
+        }
+        
+        // If no cached messages, fetch from server
         const response = await apiClient.post(
           GET_MESSAGES_ROUTE,
           { id: selectedChatData._id },
@@ -24,15 +32,23 @@ function MessageContainers() {
         );
         if (response.data.messages) {
           setSelectedChatMessages(response.data.messages);
+          // Store in allMessages for future use
+          const { allMessages: currentAllMessages } = useAppStore.getState();
+          useAppStore.setState({
+            allMessages: {
+              ...currentAllMessages,
+              [selectedChatData._id]: response.data.messages
+            }
+          });
         }
       } catch (error) {
         console.log(error);
       }
     };
-    if (selectedChatData._id) {
+    if (selectedChatData?._id) {
       if (selectedChatType === "contact") getMessages();
     }
-  }, [selectedChatData, selectedChatType, setSelectedChatMessages]);
+  }, [selectedChatData, selectedChatType, setSelectedChatMessages, allMessages]);
 
   useEffect(() => {
     if (scrollRef.current) {
