@@ -17,7 +17,11 @@ function Message({ message }) {
   });
 
   useEffect(() => {
-    if (inView && message.sender === selectedChatData._id && message.status !== "read") {
+    if (
+      inView &&
+      message.sender === selectedChatData._id &&
+      message.status !== "read"
+    ) {
       socket.current.emit("message-read", {
         messageId: message._id,
         recipientId: userInfo.id,
@@ -48,7 +52,7 @@ function Message({ message }) {
       {message.sender !== selectedChatData._id ? (
         <div className="flex gap-3 justify-end">
           <div className="flex flex-col gap-1">
-            <div className="bg-[#8417ff]/5 text-[#8417ff]/90 border border-[#8417ff]/50 p-4 rounded-3xl max-w-[70%]">
+            <div className="bg-[#8417ff]/5 text-[#8417ff]/90 border border-[#8417ff]/50 px-2 py-2 rounded-3xl">
               {checkIfImage(message.fileUrl) ? (
                 <div className="cursor-pointer">
                   <img

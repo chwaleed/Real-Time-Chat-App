@@ -3,7 +3,7 @@ import { useEffect, useRef } from "react";
 import { apiClient } from "@/lib/api-client";
 import { GET_MESSAGES_ROUTE } from "@/utils/constants";
 import moment from "moment";
-import Message from "./message";
+import Message from "../message";
 
 function MessageContainers() {
   const scrollRef = useRef();

@@ -12,7 +12,6 @@ import {
 import { useNavigate } from "react-router-dom";
 import { IoPowerSharp } from "react-icons/io5";
 import { apiClient } from "@/lib/api-client";
-import { ModeToggle } from "@/components/theme-toggle";
 function ProfileInfo() {
   const { userInfo, setUserInfo } = useAppStore();
   const navigate = useNavigate();
@@ -90,7 +89,6 @@ function ProfileInfo() {
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
-        <ModeToggle />
       </div>
     </div>
   );
